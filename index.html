@@ -5,7 +5,72 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>安徽省主要农作物遥感解译知识库</title>
 <style>
-{CSS}
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Segoe UI","Microsoft YaHei",system-ui,sans-serif;background:#0f1117;color:#c9d1d9;line-height:1.6;scroll-behavior:smooth}
+.demo-banner{background:#ffd700;color:#000;text-align:center;padding:10px;font-weight:700;font-size:.95rem}
+.info-banner{background:#21262d;color:#8b949e;text-align:center;padding:10px;font-size:.9rem;border-bottom:1px solid #30363d}
+header{text-align:center;padding:24px 16px 16px;background:#0d1117;border-bottom:1px solid #30363d;position:sticky;top:0;z-index:100}
+header h1{font-size:1.5rem;font-weight:700;margin-bottom:12px}
+.search-bar input{width:100%;max-width:560px;padding:10px 14px;border:1px solid #30363d;border-radius:8px;background:#161b22;color:#c9d1d9;font-size:.95rem;outline:none}
+.search-bar input:focus{border-color:#58a6ff}
+.season-nav{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:14px}
+.season-nav a{color:#8b949e;text-decoration:none;padding:6px 16px;border-radius:20px;border:1px solid #30363d;transition:.2s;font-size:.9rem}
+.season-nav a:hover,.season-nav a.active{color:#fff;background:#238636;border-color:#238636}
+.stats-bar{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-top:14px}
+.stats-bar .stat{font-size:.85rem;color:#8b949e}
+.stats-bar .stat b{color:#58a6ff;font-size:1.2rem}
+
+/* Season section */
+.season-section{padding:32px 16px 48px;max-width:1200px;margin:auto}
+.section-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.section-head h2{font-size:1.35rem;color:#e6edf3}
+.section-meta{font-size:.85rem;color:#8b949e}
+.crop-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.chip{background:#161b22;color:#8b949e;border:1px solid #30363d;padding:4px 12px;border-radius:14px;cursor:pointer;font-size:.82rem;transition:.15s}
+.chip:hover{border-color:#58a6ff;color:#fff}
+.chip.active{background:#238636;color:#fff;border-color:#238636}
+
+/* Image-first cards — uniform tiles */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;align-items:stretch}
+.tcard{background:#161b22;border:1px solid #30363d;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;transition:transform .15s,border-color .15s}
+.tcard:hover{border-color:#58a6ff;transform:translateY(-2px)}
+
+.card-img-wrap{position:relative;flex-shrink:0;width:100%;height:240px;background:#0d1117;overflow:hidden;cursor:zoom-in}
+.card-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.img-placeholder{color:#484f58;font-style:italic;padding:40px;text-align:center}
+.band-badge{position:absolute;top:10px;left:10px;background:rgba(88,166,255,.92);color:#000;padding:3px 10px;border-radius:6px;font-weight:700;font-size:.78rem;z-index:2}
+.band-badge.small{position:static;top:auto;left:auto;margin:4px;font-size:.7rem;display:inline-block}
+
+.card-imgs-secondary{display:flex;gap:6px;padding:6px;background:#0d1117;border-top:1px solid #30363d}
+.card-imgs-secondary div{flex:1;height:96px;position:relative;overflow:hidden;border-radius:4px;cursor:zoom-in}
+.card-imgs-secondary img{width:100%;height:100%;object-fit:cover}
+
+/* Lightbox */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:9999;cursor:zoom-out}
+.lightbox.open{display:flex}
+.lightbox img{max-width:92vw;max-height:82vh;object-fit:contain;box-shadow:0 10px 50px rgba(0,0,0,.6);border-radius:6px;background:#0d1117}
+.lightbox .lb-band{margin-top:14px;color:#000;background:rgba(88,166,255,.92);padding:5px 14px;border-radius:6px;font-weight:700;font-size:.85rem}
+
+.card-info{padding:14px 16px 16px;flex-grow:1}
+.card-info h3{font-size:1rem;color:#e6edf3;margin-bottom:8px}
+.info-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.info-table td{padding:4px 8px 4px 0;color:#8b949e;vertical-align:top;border:none}
+.info-table td:first-child{color:#7d8590;white-space:nowrap;width:80px}
+.feat-text{color:#c9d1d9!important;line-height:1.55}
+
+footer{text-align:center;padding:28px 16px;color:#484f58;font-size:.82rem;border-top:1px solid #30363d}
+
+@media(max-width:600px){
+  .cards-grid{grid-template-columns:1fr}
+  .tcard{flex-direction:row;align-items:stretch}
+  .card-img-wrap{width:140px;height:140px;flex-shrink:0}
+  .card-imgs-secondary{height:64px}
+  .card-info{padding:10px}
+  header h1{font-size:1.15rem}
+  .stats-bar{gap:10px}
+}
+
 </style>
 </head>
 <body>
@@ -42,11 +107,11 @@
     <div class="cards-grid">
       <article class="tcard" data-season="夏收" data-county="庐江县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_0_true_003_庐江县_冬小麦.jpg" alt="庐江县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_0_true_003_庐江县_冬小麦.jpg" alt="庐江县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>庐江县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-11</td></tr><tr><td>县代码</td><td>340124.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈绿色。</td></tr></table>
@@ -54,11 +119,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="庐江县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深粉红色，真彩色影像呈灰绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_1_true_004_庐江县_冬小麦.jpg" alt="庐江县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_1_true_004_庐江县_冬小麦.jpg" alt="庐江县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>庐江县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-01</td></tr><tr><td>县代码</td><td>340124.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深粉红色，真彩色影像呈灰绿色。</td></tr></table>
@@ -66,11 +131,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="庐江县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈深绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_2_true_005_庐江县_冬小麦.jpg" alt="庐江县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_2_true_005_庐江县_冬小麦.jpg" alt="庐江县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>庐江县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-19</td></tr><tr><td>县代码</td><td>340124.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈深绿色。</td></tr></table>
@@ -78,11 +143,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="庐江县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_3_true_009_庐江县_油菜籽.jpg" alt="庐江县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_3_true_009_庐江县_油菜籽.jpg" alt="庐江县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>庐江县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-11</td></tr><tr><td>县代码</td><td>340124.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。</td></tr></table>
@@ -90,11 +155,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="庐江县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈粉红色，真彩色影像呈灰黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_4_true_010_庐江县_油菜籽.jpg" alt="庐江县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_4_true_010_庐江县_油菜籽.jpg" alt="庐江县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>庐江县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-01</td></tr><tr><td>县代码</td><td>340124.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈粉红色，真彩色影像呈灰黄绿色。</td></tr></table>
@@ -102,11 +167,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="庐江县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_5_true_011_庐江县_油菜籽.jpg" alt="庐江县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_5_true_011_庐江县_油菜籽.jpg" alt="庐江县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>庐江县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-19</td></tr><tr><td>县代码</td><td>340124.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。</td></tr></table>
@@ -114,11 +179,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="繁昌区" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈浅绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_6_true_087_繁昌区_冬小麦.jpg" alt="繁昌区 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_6_true_087_繁昌区_冬小麦.jpg" alt="繁昌区 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>繁昌区 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-14</td></tr><tr><td>县代码</td><td>340212.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈浅绿色。</td></tr></table>
@@ -126,11 +191,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="繁昌区" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_7_true_088_繁昌区_冬小麦.jpg" alt="繁昌区 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_7_true_088_繁昌区_冬小麦.jpg" alt="繁昌区 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>繁昌区 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-29</td></tr><tr><td>县代码</td><td>340212.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈绿色。</td></tr></table>
@@ -138,11 +203,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="繁昌区" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈深绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_8_true_089_繁昌区_冬小麦.jpg" alt="繁昌区 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_8_true_089_繁昌区_冬小麦.jpg" alt="繁昌区 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>繁昌区 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-05</td></tr><tr><td>县代码</td><td>340212.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈深绿色。</td></tr></table>
@@ -150,11 +215,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="繁昌区" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈玫红色；真彩色影像呈黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_9_true_090_繁昌区_油菜籽.jpg" alt="繁昌区 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_9_true_090_繁昌区_油菜籽.jpg" alt="繁昌区 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>繁昌区 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-14</td></tr><tr><td>县代码</td><td>340212.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈玫红色；真彩色影像呈黄绿色。</td></tr></table>
@@ -162,11 +227,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="繁昌区" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈粉红色，真彩色影像呈亮黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_10_true_091_繁昌区_油菜籽.jpg" alt="繁昌区 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_10_true_091_繁昌区_油菜籽.jpg" alt="繁昌区 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>繁昌区 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-29</td></tr><tr><td>县代码</td><td>340212.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈粉红色，真彩色影像呈亮黄绿色。</td></tr></table>
@@ -174,11 +239,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="繁昌区" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈玫红色，真彩色影像呈黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_11_true_092_繁昌区_油菜籽.jpg" alt="繁昌区 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_11_true_092_繁昌区_油菜籽.jpg" alt="繁昌区 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>繁昌区 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-05</td></tr><tr><td>县代码</td><td>340212.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈玫红色，真彩色影像呈黄绿色。</td></tr></table>
@@ -186,11 +251,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="固镇县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_12_true_093_固镇县_冬小麦.jpg" alt="固镇县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_12_true_093_固镇县_冬小麦.jpg" alt="固镇县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>固镇县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-21</td></tr><tr><td>县代码</td><td>340323.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈绿色。</td></tr></table>
@@ -198,11 +263,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="固镇县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈深绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_13_true_094_固镇县_冬小麦.jpg" alt="固镇县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_13_true_094_固镇县_冬小麦.jpg" alt="固镇县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>固镇县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-10</td></tr><tr><td>县代码</td><td>340323.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈深绿色。</td></tr></table>
@@ -210,11 +275,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="固镇县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈深绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_14_true_095_固镇县_冬小麦.jpg" alt="固镇县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_14_true_095_固镇县_冬小麦.jpg" alt="固镇县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>固镇县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-19</td></tr><tr><td>县代码</td><td>340323.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈深绿色。</td></tr></table>
@@ -222,11 +287,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="固镇县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈粉红色，真彩色影像呈浅黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_15_true_096_固镇县_油菜籽.jpg" alt="固镇县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_15_true_096_固镇县_油菜籽.jpg" alt="固镇县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>固镇县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-21</td></tr><tr><td>县代码</td><td>340323.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈粉红色，真彩色影像呈浅黄绿色。</td></tr></table>
@@ -234,11 +299,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="固镇县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈玫粉色，真彩色影像呈黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_16_true_097_固镇县_油菜籽.jpg" alt="固镇县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_16_true_097_固镇县_油菜籽.jpg" alt="固镇县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>固镇县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-10</td></tr><tr><td>县代码</td><td>340323.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈玫粉色，真彩色影像呈黄绿色。</td></tr></table>
@@ -246,11 +311,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="固镇县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈玫红色，真彩色影像呈深黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_17_true_098_固镇县_油菜籽.jpg" alt="固镇县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_17_true_098_固镇县_油菜籽.jpg" alt="固镇县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>固镇县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-19</td></tr><tr><td>县代码</td><td>340323.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈玫红色，真彩色影像呈深黄绿色。</td></tr></table>
@@ -258,11 +323,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="寿县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_18_true_099_寿县_冬小麦.jpg" alt="寿县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_18_true_099_寿县_冬小麦.jpg" alt="寿县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>寿县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-21</td></tr><tr><td>县代码</td><td>340422.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈绿色。</td></tr></table>
@@ -270,11 +335,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="寿县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_19_true_100_寿县_冬小麦.jpg" alt="寿县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_19_true_100_寿县_冬小麦.jpg" alt="寿县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>寿县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-01</td></tr><tr><td>县代码</td><td>340422.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈绿色。</td></tr></table>
@@ -282,11 +347,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="寿县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈深绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_20_true_101_寿县_冬小麦.jpg" alt="寿县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_20_true_101_寿县_冬小麦.jpg" alt="寿县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>寿县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-19</td></tr><tr><td>县代码</td><td>340422.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈深绿色。</td></tr></table>
@@ -294,11 +359,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="寿县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_21_true_102_寿县_油菜籽.jpg" alt="寿县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_21_true_102_寿县_油菜籽.jpg" alt="寿县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>寿县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-21</td></tr><tr><td>县代码</td><td>340422.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。</td></tr></table>
@@ -306,11 +371,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="寿县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈粉红色，真彩色影像呈黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_22_true_103_寿县_油菜籽.jpg" alt="寿县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_22_true_103_寿县_油菜籽.jpg" alt="寿县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>寿县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-01</td></tr><tr><td>县代码</td><td>340422.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈粉红色，真彩色影像呈黄绿色。</td></tr></table>
@@ -318,11 +383,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="寿县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_23_true_104_寿县_油菜籽.jpg" alt="寿县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_23_true_104_寿县_油菜籽.jpg" alt="寿县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>寿县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-19</td></tr><tr><td>县代码</td><td>340422.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。</td></tr></table>
@@ -330,11 +395,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="含山县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深玫红色，真彩色影像呈绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_24_true_105_含山县_冬小麦.jpg" alt="含山县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_24_true_105_含山县_冬小麦.jpg" alt="含山县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>含山县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-10</td></tr><tr><td>县代码</td><td>340522.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深玫红色，真彩色影像呈绿色。</td></tr></table>
@@ -342,11 +407,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="含山县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈暗绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_25_true_106_含山县_冬小麦.jpg" alt="含山县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_25_true_106_含山县_冬小麦.jpg" alt="含山县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>含山县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-29</td></tr><tr><td>县代码</td><td>340522.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈暗绿色。</td></tr></table>
@@ -354,11 +419,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="含山县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈红色，真彩色影像呈绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_26_true_107_含山县_冬小麦.jpg" alt="含山县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_26_true_107_含山县_冬小麦.jpg" alt="含山县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>含山县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-24</td></tr><tr><td>县代码</td><td>340522.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈红色，真彩色影像呈绿色。</td></tr></table>
@@ -366,11 +431,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="含山县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_27_true_108_含山县_油菜籽.jpg" alt="含山县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_27_true_108_含山县_油菜籽.jpg" alt="含山县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>含山县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-10</td></tr><tr><td>县代码</td><td>340522.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。</td></tr></table>
@@ -378,11 +443,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="含山县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈白色，真彩色影像呈亮黄色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_28_true_109_含山县_油菜籽.jpg" alt="含山县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_28_true_109_含山县_油菜籽.jpg" alt="含山县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>含山县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-29</td></tr><tr><td>县代码</td><td>340522.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈白色，真彩色影像呈亮黄色。</td></tr></table>
@@ -390,11 +455,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="含山县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈玫粉色，真彩色影像呈浅黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_29_true_110_含山县_油菜籽.jpg" alt="含山县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_29_true_110_含山县_油菜籽.jpg" alt="含山县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>含山县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-24</td></tr><tr><td>县代码</td><td>340522.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈玫粉色，真彩色影像呈浅黄绿色。</td></tr></table>
@@ -402,11 +467,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="烈山区" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈深绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_30_true_111_烈山区_冬小麦.jpg" alt="烈山区 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_30_true_111_烈山区_冬小麦.jpg" alt="烈山区 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>烈山区 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-04</td></tr><tr><td>县代码</td><td>340604.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈深绿色。</td></tr></table>
@@ -414,11 +479,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="烈山区" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈深绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_31_true_112_烈山区_冬小麦.jpg" alt="烈山区 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_31_true_112_烈山区_冬小麦.jpg" alt="烈山区 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>烈山区 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-10</td></tr><tr><td>县代码</td><td>340604.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈深绿色。</td></tr></table>
@@ -426,11 +491,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="烈山区" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈粉白色，真彩色影像呈亮黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_32_true_113_烈山区_油菜籽.jpg" alt="烈山区 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_32_true_113_烈山区_油菜籽.jpg" alt="烈山区 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>烈山区 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-04</td></tr><tr><td>县代码</td><td>340604.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈粉白色，真彩色影像呈亮黄绿色。</td></tr></table>
@@ -438,11 +503,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="烈山区" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈粉红色，真彩色影像呈浅黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_33_true_114_烈山区_油菜籽.jpg" alt="烈山区 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_33_true_114_烈山区_油菜籽.jpg" alt="烈山区 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>烈山区 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-10</td></tr><tr><td>县代码</td><td>340604.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈粉红色，真彩色影像呈浅黄绿色。</td></tr></table>
@@ -450,11 +515,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="郊区" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈浅绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_34_true_115_郊区_冬小麦.jpg" alt="郊区 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_34_true_115_郊区_冬小麦.jpg" alt="郊区 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>郊区 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-11</td></tr><tr><td>县代码</td><td>340711.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈浅绿色。</td></tr></table>
@@ -462,11 +527,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="郊区" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈正红色，真彩色影像呈绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_35_true_116_郊区_冬小麦.jpg" alt="郊区 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_35_true_116_郊区_冬小麦.jpg" alt="郊区 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>郊区 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-29</td></tr><tr><td>县代码</td><td>340711.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈正红色，真彩色影像呈绿色。</td></tr></table>
@@ -474,11 +539,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="郊区" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈深绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_36_true_117_郊区_冬小麦.jpg" alt="郊区 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_36_true_117_郊区_冬小麦.jpg" alt="郊区 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>郊区 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-18</td></tr><tr><td>县代码</td><td>340711.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈深绿色。</td></tr></table>
@@ -486,11 +551,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="郊区" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_37_true_118_郊区_油菜籽.jpg" alt="郊区 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_37_true_118_郊区_油菜籽.jpg" alt="郊区 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>郊区 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-11</td></tr><tr><td>县代码</td><td>340711.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。</td></tr></table>
@@ -498,11 +563,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="郊区" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈粉白色，真彩色影像呈亮黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_38_true_119_郊区_油菜籽.jpg" alt="郊区 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_38_true_119_郊区_油菜籽.jpg" alt="郊区 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>郊区 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-29</td></tr><tr><td>县代码</td><td>340711.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈粉白色，真彩色影像呈亮黄绿色。</td></tr></table>
@@ -510,11 +575,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="郊区" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈深玫红色，真彩色影像呈绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_39_true_120_郊区_油菜籽.jpg" alt="郊区 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_39_true_120_郊区_油菜籽.jpg" alt="郊区 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>郊区 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-18</td></tr><tr><td>县代码</td><td>340711.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深玫红色，真彩色影像呈绿色。</td></tr></table>
@@ -522,11 +587,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="宿松县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈浅绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_40_true_121_宿松县_冬小麦.jpg" alt="宿松县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_40_true_121_宿松县_冬小麦.jpg" alt="宿松县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>宿松县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-11</td></tr><tr><td>县代码</td><td>340826.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈浅绿色。</td></tr></table>
@@ -534,11 +599,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="宿松县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈深绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_41_true_122_宿松县_冬小麦.jpg" alt="宿松县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_41_true_122_宿松县_冬小麦.jpg" alt="宿松县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>宿松县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-04</td></tr><tr><td>县代码</td><td>340826.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈深绿色。</td></tr></table>
@@ -546,11 +611,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="宿松县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_43_true_123_宿松县_油菜籽.jpg" alt="宿松县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_43_true_123_宿松县_油菜籽.jpg" alt="宿松县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>宿松县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-11</td></tr><tr><td>县代码</td><td>340826.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。</td></tr></table>
@@ -558,11 +623,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="宿松县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈粉红色，真彩色影像呈灰黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_44_true_124_宿松县_油菜籽.jpg" alt="宿松县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_44_true_124_宿松县_油菜籽.jpg" alt="宿松县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>宿松县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-04</td></tr><tr><td>县代码</td><td>340826.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈粉红色，真彩色影像呈灰黄绿色。</td></tr></table>
@@ -570,11 +635,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="宿松县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_45_true_125_宿松县_油菜籽.jpg" alt="宿松县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_45_true_125_宿松县_油菜籽.jpg" alt="宿松县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>宿松县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-19</td></tr><tr><td>县代码</td><td>340826.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。</td></tr></table>
@@ -582,11 +647,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="歙县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_46_true_126_歙县_油菜籽.jpg" alt="歙县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_46_true_126_歙县_油菜籽.jpg" alt="歙县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>歙县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-14</td></tr><tr><td>县代码</td><td>341021.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。</td></tr></table>
@@ -594,11 +659,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="歙县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈深玫红色，真彩色影像呈暗黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_47_true_127_歙县_油菜籽.jpg" alt="歙县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_47_true_127_歙县_油菜籽.jpg" alt="歙县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>歙县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-25</td></tr><tr><td>县代码</td><td>341021.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深玫红色，真彩色影像呈暗黄绿色。</td></tr></table>
@@ -606,11 +671,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="歙县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈深黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_48_true_128_歙县_油菜籽.jpg" alt="歙县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_48_true_128_歙县_油菜籽.jpg" alt="歙县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>歙县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-20</td></tr><tr><td>县代码</td><td>341021.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈深黄绿色。</td></tr></table>
@@ -618,11 +683,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="来安县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈浅绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_49_true_129_来安县_冬小麦.jpg" alt="来安县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_49_true_129_来安县_冬小麦.jpg" alt="来安县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>来安县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-14</td></tr><tr><td>县代码</td><td>341122.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈浅绿色。</td></tr></table>
@@ -630,11 +695,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="来安县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈深绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_50_true_130_来安县_冬小麦.jpg" alt="来安县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_50_true_130_来安县_冬小麦.jpg" alt="来安县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>来安县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-05</td></tr><tr><td>县代码</td><td>341122.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈深绿色。</td></tr></table>
@@ -642,11 +707,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="来安县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈灰绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_51_true_131_来安县_冬小麦.jpg" alt="来安县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_51_true_131_来安县_冬小麦.jpg" alt="来安县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>来安县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-24</td></tr><tr><td>县代码</td><td>341122.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈灰绿色。</td></tr></table>
@@ -654,11 +719,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="来安县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_52_true_132_来安县_油菜籽.jpg" alt="来安县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_52_true_132_来安县_油菜籽.jpg" alt="来安县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>来安县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-14</td></tr><tr><td>县代码</td><td>341122.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。</td></tr></table>
@@ -666,11 +731,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="来安县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈粉白色，真彩色影像呈亮黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_53_true_133_来安县_油菜籽.jpg" alt="来安县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_53_true_133_来安县_油菜籽.jpg" alt="来安县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>来安县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-05</td></tr><tr><td>县代码</td><td>341122.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈粉白色，真彩色影像呈亮黄绿色。</td></tr></table>
@@ -678,11 +743,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="来安县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈粉色，真彩色影像呈黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_54_true_134_来安县_油菜籽.jpg" alt="来安县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_54_true_134_来安县_油菜籽.jpg" alt="来安县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>来安县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-24</td></tr><tr><td>县代码</td><td>341122.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈粉色，真彩色影像呈黄绿色。</td></tr></table>
@@ -690,11 +755,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="颍州区" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈深绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_55_true_135_颍州区_冬小麦.jpg" alt="颍州区 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_55_true_135_颍州区_冬小麦.jpg" alt="颍州区 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>颍州区 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-29</td></tr><tr><td>县代码</td><td>341202.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈深绿色。</td></tr></table>
@@ -702,11 +767,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="颍州区" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈深绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_56_true_136_颍州区_冬小麦.jpg" alt="颍州区 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_56_true_136_颍州区_冬小麦.jpg" alt="颍州区 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>颍州区 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-19</td></tr><tr><td>县代码</td><td>341202.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈深绿色。</td></tr></table>
@@ -714,11 +779,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="颍州区" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈粉白色，真彩色影像呈亮黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_57_true_137_颍州区_油菜籽.jpg" alt="颍州区 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_57_true_137_颍州区_油菜籽.jpg" alt="颍州区 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>颍州区 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-29</td></tr><tr><td>县代码</td><td>341202.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈粉白色，真彩色影像呈亮黄绿色。</td></tr></table>
@@ -726,11 +791,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="颍州区" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈玫红色，真彩色影像呈暗黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_58_true_138_颍州区_油菜籽.jpg" alt="颍州区 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_58_true_138_颍州区_油菜籽.jpg" alt="颍州区 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>颍州区 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-19</td></tr><tr><td>县代码</td><td>341202.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈玫红色，真彩色影像呈暗黄绿色。</td></tr></table>
@@ -738,11 +803,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="埇桥区" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈深绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_59_true_139_埇桥区_冬小麦.jpg" alt="埇桥区 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_59_true_139_埇桥区_冬小麦.jpg" alt="埇桥区 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>埇桥区 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-01</td></tr><tr><td>县代码</td><td>341302.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈深绿色。</td></tr></table>
@@ -750,11 +815,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="埇桥区" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈深绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_60_true_140_埇桥区_冬小麦.jpg" alt="埇桥区 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_60_true_140_埇桥区_冬小麦.jpg" alt="埇桥区 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>埇桥区 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-10</td></tr><tr><td>县代码</td><td>341302.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈深绿色。</td></tr></table>
@@ -762,11 +827,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="埇桥区" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈粉色，真彩色影像呈亮黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_61_true_141_埇桥区_油菜籽.jpg" alt="埇桥区 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_61_true_141_埇桥区_油菜籽.jpg" alt="埇桥区 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>埇桥区 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-01</td></tr><tr><td>县代码</td><td>341302.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈粉色，真彩色影像呈亮黄绿色。</td></tr></table>
@@ -774,11 +839,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="埇桥区" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈玫粉色，真彩色影像呈黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_62_true_142_埇桥区_油菜籽.jpg" alt="埇桥区 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_62_true_142_埇桥区_油菜籽.jpg" alt="埇桥区 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>埇桥区 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-10</td></tr><tr><td>县代码</td><td>341302.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈玫粉色，真彩色影像呈黄绿色。</td></tr></table>
@@ -786,11 +851,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="舒城县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_63_true_143_舒城县_冬小麦.jpg" alt="舒城县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_63_true_143_舒城县_冬小麦.jpg" alt="舒城县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>舒城县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-21</td></tr><tr><td>县代码</td><td>341523.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。</td></tr></table>
@@ -798,11 +863,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="舒城县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_64_true_144_舒城县_冬小麦.jpg" alt="舒城县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_64_true_144_舒城县_冬小麦.jpg" alt="舒城县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>舒城县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-01</td></tr><tr><td>县代码</td><td>341523.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈绿色。</td></tr></table>
@@ -810,11 +875,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="舒城县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈暗绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_65_true_145_舒城县_冬小麦.jpg" alt="舒城县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_65_true_145_舒城县_冬小麦.jpg" alt="舒城县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>舒城县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-19</td></tr><tr><td>县代码</td><td>341523.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈暗绿色。</td></tr></table>
@@ -822,11 +887,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="舒城县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈粉红色，真彩色影像呈浅黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_66_true_146_舒城县_油菜籽.jpg" alt="舒城县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_66_true_146_舒城县_油菜籽.jpg" alt="舒城县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>舒城县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-21</td></tr><tr><td>县代码</td><td>341523.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈粉红色，真彩色影像呈浅黄绿色。</td></tr></table>
@@ -834,11 +899,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="舒城县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈粉色，真彩色影像呈黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_67_true_147_舒城县_油菜籽.jpg" alt="舒城县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_67_true_147_舒城县_油菜籽.jpg" alt="舒城县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>舒城县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-01</td></tr><tr><td>县代码</td><td>341523.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈粉色，真彩色影像呈黄绿色。</td></tr></table>
@@ -846,11 +911,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="舒城县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_68_true_148_舒城县_油菜籽.jpg" alt="舒城县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_68_true_148_舒城县_油菜籽.jpg" alt="舒城县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>舒城县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-19</td></tr><tr><td>县代码</td><td>341523.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。</td></tr></table>
@@ -858,11 +923,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="涡阳县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈深绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_69_true_149_涡阳县_冬小麦.jpg" alt="涡阳县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_69_true_149_涡阳县_冬小麦.jpg" alt="涡阳县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>涡阳县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-05</td></tr><tr><td>县代码</td><td>341621.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈深绿色。</td></tr></table>
@@ -870,11 +935,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="涡阳县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈粉白色，真彩色影像呈亮黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_70_true_150_涡阳县_油菜籽.jpg" alt="涡阳县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_70_true_150_涡阳县_油菜籽.jpg" alt="涡阳县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>涡阳县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-05</td></tr><tr><td>县代码</td><td>341621.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈粉白色，真彩色影像呈亮黄绿色。</td></tr></table>
@@ -882,11 +947,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="东至县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈玫红色，真彩色影像呈浅绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_71_true_151_东至县_冬小麦.jpg" alt="东至县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_71_true_151_东至县_冬小麦.jpg" alt="东至县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>东至县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-11</td></tr><tr><td>县代码</td><td>341721.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈玫红色，真彩色影像呈浅绿色。</td></tr></table>
@@ -894,11 +959,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="东至县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_72_true_152_东至县_冬小麦.jpg" alt="东至县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_72_true_152_东至县_冬小麦.jpg" alt="东至县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>东至县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-29</td></tr><tr><td>县代码</td><td>341721.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈绿色。</td></tr></table>
@@ -906,11 +971,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="东至县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_73_true_153_东至县_冬小麦.jpg" alt="东至县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_73_true_153_东至县_冬小麦.jpg" alt="东至县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>东至县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-19</td></tr><tr><td>县代码</td><td>341721.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈绿色。</td></tr></table>
@@ -918,11 +983,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="东至县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_74_true_154_东至县_油菜籽.jpg" alt="东至县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_74_true_154_东至县_油菜籽.jpg" alt="东至县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>东至县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-11</td></tr><tr><td>县代码</td><td>341721.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。</td></tr></table>
@@ -930,11 +995,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="东至县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈白色，真彩色影像呈亮黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_75_true_155_东至县_油菜籽.jpg" alt="东至县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_75_true_155_东至县_油菜籽.jpg" alt="东至县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>东至县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-29</td></tr><tr><td>县代码</td><td>341721.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈白色，真彩色影像呈亮黄绿色。</td></tr></table>
@@ -942,11 +1007,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="东至县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_76_true_156_东至县_油菜籽.jpg" alt="东至县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_76_true_156_东至县_油菜籽.jpg" alt="东至县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>东至县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-19</td></tr><tr><td>县代码</td><td>341721.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。</td></tr></table>
@@ -954,11 +1019,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="郎溪县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_77_true_157_郎溪县_冬小麦.jpg" alt="郎溪县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_77_true_157_郎溪县_冬小麦.jpg" alt="郎溪县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>郎溪县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-02</td></tr><tr><td>县代码</td><td>341821.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈绿色。</td></tr></table>
@@ -966,11 +1031,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="郎溪县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈深绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_78_true_158_郎溪县_冬小麦.jpg" alt="郎溪县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_78_true_158_郎溪县_冬小麦.jpg" alt="郎溪县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>郎溪县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-26</td></tr><tr><td>县代码</td><td>341821.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈深绿色。</td></tr></table>
@@ -978,11 +1043,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="郎溪县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈粉色，真彩色影像呈亮黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_79_true_159_郎溪县_油菜籽.jpg" alt="郎溪县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_79_true_159_郎溪县_油菜籽.jpg" alt="郎溪县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>郎溪县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-02</td></tr><tr><td>县代码</td><td>341821.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈粉色，真彩色影像呈亮黄绿色。</td></tr></table>
@@ -990,11 +1055,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="郎溪县" data-crop="油菜籽" data-band="321" data-feat="432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_80_true_160_郎溪县_油菜籽.jpg" alt="郎溪县 油菜籽 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_80_true_160_郎溪县_油菜籽.jpg" alt="郎溪县 油菜籽 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>郎溪县 · 油菜籽</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-26</td></tr><tr><td>县代码</td><td>341821.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈玫红色，真彩色影像呈浅黄绿色。</td></tr></table>
@@ -1002,11 +1067,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="宿松县" data-crop="冬小麦" data-band="321" data-feat="432假彩色影像呈深红色，真彩色影像呈暗绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_0_42_true_161_宿松县_冬小麦.jpg" alt="宿松县 冬小麦 真彩色(321)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_0_42_true_161_宿松县_冬小麦.jpg" alt="宿松县 冬小麦 真彩色(321)" loading="lazy" data-band="真彩色(321)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-321">真彩色(321)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>宿松县 · 冬小麦</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-19</td></tr><tr><td>县代码</td><td>340826.0</td></tr><tr><td>影像特征</td><td class="feat-text">432假彩色影像呈深红色，真彩色影像呈暗绿色。</td></tr></table>
@@ -1014,11 +1079,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="烈山区" data-crop="药材" data-band="432" data-feat="">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_1_0_single_162_烈山区_药材.jpg" alt="烈山区 药材 假彩色(432)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_1_0_single_162_烈山区_药材.jpg" alt="烈山区 药材 假彩色(432)" loading="lazy" data-band="假彩色(432)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-432">假彩色(432)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>烈山区 · 药材</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-01</td></tr><tr><td>县代码</td><td>340604.0</td></tr><tr><td>易混淆</td><td><em>冬小麦</em></td></tr></table>
@@ -1026,11 +1091,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="烈山区" data-crop="药材" data-band="432" data-feat="">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_1_1_single_163_烈山区_药材.jpg" alt="烈山区 药材 假彩色(432)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_1_1_single_163_烈山区_药材.jpg" alt="烈山区 药材 假彩色(432)" loading="lazy" data-band="假彩色(432)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-432">假彩色(432)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>烈山区 · 药材</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-10</td></tr><tr><td>县代码</td><td>340604.0</td></tr><tr><td>易混淆</td><td><em>油菜籽</em></td></tr></table>
@@ -1038,11 +1103,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="颍州区" data-crop="药材" data-band="432" data-feat="">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_1_2_single_164_颍州区_药材.jpg" alt="颍州区 药材 假彩色(432)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_1_2_single_164_颍州区_药材.jpg" alt="颍州区 药材 假彩色(432)" loading="lazy" data-band="假彩色(432)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-432">假彩色(432)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>颍州区 · 药材</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-29</td></tr><tr><td>县代码</td><td>341202.0</td></tr><tr><td>易混淆</td><td><em>冬小麦</em></td></tr></table>
@@ -1050,11 +1115,11 @@
       </article>
       <article class="tcard" data-season="夏收" data-county="郎溪县" data-crop="园艺果树" data-band="432" data-feat="">
         <div class="card-img-wrap">
-          <img src="assets/images/夏收/夏收_1_5_single_166_郎溪县_园艺果树.jpg" alt="郎溪县 园艺果树 假彩色(432)" loading="lazy"
+          <img class="card-img" src="assets/images/夏收/夏收_1_5_single_166_郎溪县_园艺果树.jpg" alt="郎溪县 园艺果树 假彩色(432)" loading="lazy" data-band="假彩色(432)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-432">假彩色(432)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>郎溪县 · 园艺果树</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-02</td></tr><tr><td>县代码</td><td>341821.0</td></tr><tr><td>易混淆</td><td><em>冬小麦</em></td></tr></table>
@@ -1076,11 +1141,11 @@
     <div class="cards-grid">
       <article class="tcard" data-season="早稻" data-county="庐江县" data-crop="早稻" data-band="243" data-feat="243假彩色影像呈浅紫色。">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_0_4_false_004_庐江县_早稻.jpg" alt="庐江县 早稻 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_0_4_false_004_庐江县_早稻.jpg" alt="庐江县 早稻 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          <div class="card-imgs-secondary"><div><img src="assets/images/早稻/早稻_0_8_false_008_庐江县_早稻.jpg" loading="lazy"><span class="band-badge small band-243">假彩色(243)</span></div></div>
         </div>
+        <div class="card-imgs-secondary"><div><img src="assets/images/早稻/早稻_0_8_false_008_庐江县_早稻.jpg" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"><span class="band-badge small">假彩色(243)</span></div></div>
         <div class="card-info">
           <h3>庐江县 · 早稻</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-19</td></tr><tr><td>县代码</td><td>340124.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈浅紫色。</td></tr><tr><td>备注</td><td>播种期，影像上呈裸地特征，没有明显植被特征。</td></tr></table>
@@ -1088,11 +1153,11 @@
       </article>
       <article class="tcard" data-season="早稻" data-county="庐江县" data-crop="早稻" data-band="243" data-feat="243假彩色影像呈浅紫色。">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_0_5_false_005_庐江县_早稻.jpg" alt="庐江县 早稻 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_0_5_false_005_庐江县_早稻.jpg" alt="庐江县 早稻 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          <div class="card-imgs-secondary"><div><img src="assets/images/早稻/早稻_0_9_false_009_庐江县_早稻.jpg" loading="lazy"><span class="band-badge small band-243">假彩色(243)</span></div></div>
         </div>
+        <div class="card-imgs-secondary"><div><img src="assets/images/早稻/早稻_0_9_false_009_庐江县_早稻.jpg" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"><span class="band-badge small">假彩色(243)</span></div></div>
         <div class="card-info">
           <h3>庐江县 · 早稻</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-05-01</td></tr><tr><td>县代码</td><td>340124.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈浅紫色。</td></tr><tr><td>备注</td><td>分蘖期，影像上呈裸地特征，没有明显植被特征。</td></tr></table>
@@ -1100,11 +1165,11 @@
       </article>
       <article class="tcard" data-season="早稻" data-county="庐江县" data-crop="早稻" data-band="243" data-feat="243假彩色影像呈暗绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_0_6_false_006_庐江县_早稻.jpg" alt="庐江县 早稻 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_0_6_false_006_庐江县_早稻.jpg" alt="庐江县 早稻 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          <div class="card-imgs-secondary"><div><img src="assets/images/早稻/早稻_0_10_false_010_庐江县_早稻.jpg" loading="lazy"><span class="band-badge small band-243">假彩色(243)</span></div></div>
         </div>
+        <div class="card-imgs-secondary"><div><img src="assets/images/早稻/早稻_0_10_false_010_庐江县_早稻.jpg" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"><span class="band-badge small">假彩色(243)</span></div></div>
         <div class="card-info">
           <h3>庐江县 · 早稻</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-05-16</td></tr><tr><td>县代码</td><td>340124.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈暗绿色。</td></tr><tr><td>备注</td><td>拔节期，开始有较浅的植被特征。</td></tr></table>
@@ -1112,11 +1177,11 @@
       </article>
       <article class="tcard" data-season="早稻" data-county="庐江县" data-crop="早稻" data-band="243" data-feat="243假彩色影像呈亮绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_0_7_false_007_庐江县_早稻.jpg" alt="庐江县 早稻 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_0_7_false_007_庐江县_早稻.jpg" alt="庐江县 早稻 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          <div class="card-imgs-secondary"><div><img src="assets/images/早稻/早稻_0_11_false_011_庐江县_早稻.jpg" loading="lazy"><span class="band-badge small band-243">假彩色(243)</span></div></div>
         </div>
+        <div class="card-imgs-secondary"><div><img src="assets/images/早稻/早稻_0_11_false_011_庐江县_早稻.jpg" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"><span class="band-badge small">假彩色(243)</span></div></div>
         <div class="card-info">
           <h3>庐江县 · 早稻</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-06-09</td></tr><tr><td>县代码</td><td>340124.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈亮绿色。</td></tr><tr><td>备注</td><td>孕穗期，有明显的植被特征。</td></tr></table>
@@ -1124,11 +1189,11 @@
       </article>
       <article class="tcard" data-season="早稻" data-county="南陵县" data-crop="早稻" data-band="243" data-feat="243假彩色影像呈暗黑色。">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_0_16_false_016_南陵县_早稻.jpg" alt="南陵县 早稻 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_0_16_false_016_南陵县_早稻.jpg" alt="南陵县 早稻 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          <div class="card-imgs-secondary"><div><img src="assets/images/早稻/早稻_0_20_false_020_南陵县_早稻.jpg" loading="lazy"><span class="band-badge small band-243">假彩色(243)</span></div></div>
         </div>
+        <div class="card-imgs-secondary"><div><img src="assets/images/早稻/早稻_0_20_false_020_南陵县_早稻.jpg" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"><span class="band-badge small">假彩色(243)</span></div></div>
         <div class="card-info">
           <h3>南陵县 · 早稻</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-03-25</td></tr><tr><td>县代码</td><td>340223.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈暗黑色。</td></tr><tr><td>备注</td><td>上季作物植被特征（非冬小麦）。</td></tr></table>
@@ -1136,11 +1201,11 @@
       </article>
       <article class="tcard" data-season="早稻" data-county="南陵县" data-crop="早稻" data-band="243" data-feat="243假彩色影像呈浅紫色。">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_0_17_false_017_南陵县_早稻.jpg" alt="南陵县 早稻 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_0_17_false_017_南陵县_早稻.jpg" alt="南陵县 早稻 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          <div class="card-imgs-secondary"><div><img src="assets/images/早稻/早稻_0_21_false_021_南陵县_早稻.jpg" loading="lazy"><span class="band-badge small band-243">假彩色(243)</span></div></div>
         </div>
+        <div class="card-imgs-secondary"><div><img src="assets/images/早稻/早稻_0_21_false_021_南陵县_早稻.jpg" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"><span class="band-badge small">假彩色(243)</span></div></div>
         <div class="card-info">
           <h3>南陵县 · 早稻</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-25</td></tr><tr><td>县代码</td><td>340223.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈浅紫色。</td></tr><tr><td>备注</td><td>三叶期，影像上呈裸地特征，没有明显植被特征。</td></tr></table>
@@ -1148,11 +1213,11 @@
       </article>
       <article class="tcard" data-season="早稻" data-county="南陵县" data-crop="早稻" data-band="243" data-feat="243假彩色影像呈暗绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_0_18_false_018_南陵县_早稻.jpg" alt="南陵县 早稻 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_0_18_false_018_南陵县_早稻.jpg" alt="南陵县 早稻 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>南陵县 · 早稻</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-05-31</td></tr><tr><td>县代码</td><td>340223.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈暗绿色。</td></tr><tr><td>备注</td><td>拔节期，有明显植被特征。</td></tr></table>
@@ -1160,11 +1225,11 @@
       </article>
       <article class="tcard" data-season="早稻" data-county="南陵县" data-crop="早稻" data-band="243" data-feat="243假彩色影像呈暗绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_0_19_false_019_南陵县_早稻.jpg" alt="南陵县 早稻 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_0_19_false_019_南陵县_早稻.jpg" alt="南陵县 早稻 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          <div class="card-imgs-secondary"><div><img src="assets/images/早稻/早稻_0_22_false_022_南陵县_早稻.jpg" loading="lazy"><span class="band-badge small band-243">假彩色(243)</span></div></div>
         </div>
+        <div class="card-imgs-secondary"><div><img src="assets/images/早稻/早稻_0_22_false_022_南陵县_早稻.jpg" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"><span class="band-badge small">假彩色(243)</span></div></div>
         <div class="card-info">
           <h3>南陵县 · 早稻</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-06-02</td></tr><tr><td>县代码</td><td>340223.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈暗绿色。</td></tr><tr><td>备注</td><td>抽穗期，有明显植被特征。</td></tr></table>
@@ -1172,11 +1237,11 @@
       </article>
       <article class="tcard" data-season="早稻" data-county="枞阳县" data-crop="早稻" data-band="243" data-feat="243假彩色影像呈暗紫黑色。">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_0_25_false_025_枞阳县_早稻.jpg" alt="枞阳县 早稻 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_0_25_false_025_枞阳县_早稻.jpg" alt="枞阳县 早稻 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          <div class="card-imgs-secondary"><div><img src="assets/images/早稻/早稻_0_27_false_027_枞阳县_早稻.jpg" loading="lazy"><span class="band-badge small band-243">假彩色(243)</span></div></div>
         </div>
+        <div class="card-imgs-secondary"><div><img src="assets/images/早稻/早稻_0_27_false_027_枞阳县_早稻.jpg" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"><span class="band-badge small">假彩色(243)</span></div></div>
         <div class="card-info">
           <h3>枞阳县 · 早稻</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-05-16</td></tr><tr><td>县代码</td><td>340722.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈暗紫黑色。</td></tr><tr><td>备注</td><td>分蘖期，影像上偏裸地特征，没有明显植被特征。</td></tr></table>
@@ -1184,11 +1249,11 @@
       </article>
       <article class="tcard" data-season="早稻" data-county="枞阳县" data-crop="早稻" data-band="243" data-feat="243假彩色影像呈绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_0_26_false_026_枞阳县_早稻.jpg" alt="枞阳县 早稻 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_0_26_false_026_枞阳县_早稻.jpg" alt="枞阳县 早稻 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          <div class="card-imgs-secondary"><div><img src="assets/images/早稻/早稻_0_28_false_028_枞阳县_早稻.jpg" loading="lazy"><span class="band-badge small band-243">假彩色(243)</span></div></div>
         </div>
+        <div class="card-imgs-secondary"><div><img src="assets/images/早稻/早稻_0_28_false_028_枞阳县_早稻.jpg" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"><span class="band-badge small">假彩色(243)</span></div></div>
         <div class="card-info">
           <h3>枞阳县 · 早稻</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-06-09</td></tr><tr><td>县代码</td><td>340722.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈绿色。</td></tr><tr><td>备注</td><td>孕穗期，有明显植被特征。</td></tr></table>
@@ -1196,11 +1261,11 @@
       </article>
       <article class="tcard" data-season="早稻" data-county="贵池区" data-crop="早稻" data-band="243" data-feat="243假彩色影像呈浅紫色。">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_0_29_false_029_贵池区_早稻.jpg" alt="贵池区 早稻 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_0_29_false_029_贵池区_早稻.jpg" alt="贵池区 早稻 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>贵池区 · 早稻</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-05-05</td></tr><tr><td>县代码</td><td>341702.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈浅紫色。</td></tr><tr><td>备注</td><td>拔节孕穗期，影像上呈裸地特征，没有植被特征。</td></tr></table>
@@ -1208,11 +1273,11 @@
       </article>
       <article class="tcard" data-season="早稻" data-county="贵池区" data-crop="早稻" data-band="243" data-feat="243假彩色影像呈暗紫黑色。">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_0_30_false_030_贵池区_早稻.jpg" alt="贵池区 早稻 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_0_30_false_030_贵池区_早稻.jpg" alt="贵池区 早稻 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>贵池区 · 早稻</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-05-16</td></tr><tr><td>县代码</td><td>341702.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈暗紫黑色。</td></tr><tr><td>备注</td><td>拔节孕穗期，影像上呈裸地特征，没有植被特征。</td></tr></table>
@@ -1220,11 +1285,11 @@
       </article>
       <article class="tcard" data-season="早稻" data-county="贵池区" data-crop="早稻" data-band="243" data-feat="243假彩色影像呈绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_0_31_false_031_贵池区_早稻.jpg" alt="贵池区 早稻 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_0_31_false_031_贵池区_早稻.jpg" alt="贵池区 早稻 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>贵池区 · 早稻</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-06-09</td></tr><tr><td>县代码</td><td>341702.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈绿色。</td></tr><tr><td>备注</td><td>抽穗期，有明显植被特征。</td></tr></table>
@@ -1232,11 +1297,11 @@
       </article>
       <article class="tcard" data-season="早稻" data-county="宣州区" data-crop="早稻" data-band="243" data-feat="243假彩色影像呈浅紫色。">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_0_35_false_035_宣州区_早稻.jpg" alt="宣州区 早稻 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_0_35_false_035_宣州区_早稻.jpg" alt="宣州区 早稻 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>宣州区 · 早稻</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-05-11</td></tr><tr><td>县代码</td><td>341802.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈浅紫色。</td></tr><tr><td>备注</td><td>分蘖期，影像上呈裸地特征，没有植被特征。</td></tr></table>
@@ -1244,11 +1309,11 @@
       </article>
       <article class="tcard" data-season="早稻" data-county="宣州区" data-crop="早稻" data-band="243" data-feat="243假彩色影像呈浅浅绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_0_36_false_036_宣州区_早稻.jpg" alt="宣州区 早稻 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_0_36_false_036_宣州区_早稻.jpg" alt="宣州区 早稻 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>宣州区 · 早稻</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-05-17</td></tr><tr><td>县代码</td><td>341802.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈浅浅绿色。</td></tr><tr><td>备注</td><td>分蘖期，开始有浅植被特征。</td></tr></table>
@@ -1256,11 +1321,11 @@
       </article>
       <article class="tcard" data-season="早稻" data-county="宣州区" data-crop="早稻" data-band="243" data-feat="243假彩色影像呈绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_0_37_false_037_宣州区_早稻.jpg" alt="宣州区 早稻 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_0_37_false_037_宣州区_早稻.jpg" alt="宣州区 早稻 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>宣州区 · 早稻</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-06-02</td></tr><tr><td>县代码</td><td>341802.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈绿色。</td></tr><tr><td>备注</td><td>抽穗期，有明显植被特征。</td></tr></table>
@@ -1268,11 +1333,11 @@
       </article>
       <article class="tcard" data-season="早稻" data-county="烈山区" data-crop="药材" data-band="432" data-feat="">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_1_0_single_038_烈山区_药材.jpg" alt="烈山区 药材 假彩色(432)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_1_0_single_038_烈山区_药材.jpg" alt="烈山区 药材 假彩色(432)" loading="lazy" data-band="假彩色(432)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-432">假彩色(432)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>烈山区 · 药材</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-01</td></tr><tr><td>县代码</td><td>340604.0</td></tr></table>
@@ -1280,11 +1345,11 @@
       </article>
       <article class="tcard" data-season="早稻" data-county="庐江县" data-crop="水生作物" data-band="243" data-feat="">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_1_1_single_039_庐江县_水生作物.jpg" alt="庐江县 水生作物 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_1_1_single_039_庐江县_水生作物.jpg" alt="庐江县 水生作物 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>庐江县 · 水生作物</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-19</td></tr><tr><td>县代码</td><td>340124.0</td></tr><tr><td>备注</td><td>影像上呈水的特征，没有明显植被特征。</td></tr></table>
@@ -1292,11 +1357,11 @@
       </article>
       <article class="tcard" data-season="早稻" data-county="庐江县" data-crop="水生作物" data-band="243" data-feat="">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_1_2_single_040_庐江县_水生作物.jpg" alt="庐江县 水生作物 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_1_2_single_040_庐江县_水生作物.jpg" alt="庐江县 水生作物 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>庐江县 · 水生作物</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-05-01</td></tr><tr><td>县代码</td><td>340124.0</td></tr><tr><td>备注</td><td>影像上呈水的特征，没有明显植被特征。</td></tr></table>
@@ -1304,11 +1369,11 @@
       </article>
       <article class="tcard" data-season="早稻" data-county="庐江县" data-crop="水生作物" data-band="243" data-feat="">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_1_3_single_041_庐江县_水生作物.jpg" alt="庐江县 水生作物 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_1_3_single_041_庐江县_水生作物.jpg" alt="庐江县 水生作物 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>庐江县 · 水生作物</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-05-16</td></tr><tr><td>县代码</td><td>340124.0</td></tr><tr><td>备注</td><td>影像上有明显的植被特征。</td></tr></table>
@@ -1316,11 +1381,11 @@
       </article>
       <article class="tcard" data-season="早稻" data-county="庐江县" data-crop="水生作物" data-band="243" data-feat="">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_1_4_single_042_庐江县_水生作物.jpg" alt="庐江县 水生作物 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_1_4_single_042_庐江县_水生作物.jpg" alt="庐江县 水生作物 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>庐江县 · 水生作物</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-06-09</td></tr><tr><td>县代码</td><td>340124.0</td></tr><tr><td>备注</td><td>影像上有明显的植被特征。</td></tr></table>
@@ -1328,11 +1393,11 @@
       </article>
       <article class="tcard" data-season="早稻" data-county="南陵县" data-crop="烤烟" data-band="243" data-feat="">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_1_8_single_046_南陵县_烤烟.jpg" alt="南陵县 烤烟 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_1_8_single_046_南陵县_烤烟.jpg" alt="南陵县 烤烟 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>南陵县 · 烤烟</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-04-25</td></tr><tr><td>县代码</td><td>340223.0</td></tr><tr><td>备注</td><td>影像上呈裸地特征，没有明显植被特征。</td></tr></table>
@@ -1340,11 +1405,11 @@
       </article>
       <article class="tcard" data-season="早稻" data-county="南陵县" data-crop="烤烟" data-band="243" data-feat="">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_1_9_single_047_南陵县_烤烟.jpg" alt="南陵县 烤烟 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_1_9_single_047_南陵县_烤烟.jpg" alt="南陵县 烤烟 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>南陵县 · 烤烟</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-05-31</td></tr><tr><td>县代码</td><td>340223.0</td></tr><tr><td>备注</td><td>影像上开始有浅植被特征。</td></tr></table>
@@ -1352,11 +1417,11 @@
       </article>
       <article class="tcard" data-season="早稻" data-county="南陵县" data-crop="烤烟" data-band="243" data-feat="">
         <div class="card-img-wrap">
-          <img src="assets/images/早稻/早稻_1_10_single_048_南陵县_烤烟.jpg" alt="南陵县 烤烟 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/早稻/早稻_1_10_single_048_南陵县_烤烟.jpg" alt="南陵县 烤烟 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>南陵县 · 烤烟</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2026-06-02</td></tr><tr><td>县代码</td><td>340223.0</td></tr><tr><td>备注</td><td>影像上有明显的植被特征。</td></tr></table>
@@ -1378,11 +1443,11 @@
     <div class="cards-grid">
       <article class="tcard" data-season="秋收" data-county="阜南县" data-crop="夏玉米" data-band="243" data-feat="243假彩色影像呈浅紫色。">
         <div class="card-img-wrap">
-          <img src="assets/images/秋收/秋收_0_3_false_003_阜南县_夏玉米.jpg" alt="阜南县 夏玉米 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/秋收/秋收_0_3_false_003_阜南县_夏玉米.jpg" alt="阜南县 夏玉米 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          <div class="card-imgs-secondary"><div><img src="assets/images/秋收/秋收_0_6_false_006_阜南县_夏玉米.jpg" loading="lazy"><span class="band-badge small band-243">假彩色(243)</span></div></div>
         </div>
+        <div class="card-imgs-secondary"><div><img src="assets/images/秋收/秋收_0_6_false_006_阜南县_夏玉米.jpg" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"><span class="band-badge small">假彩色(243)</span></div></div>
         <div class="card-info">
           <h3>阜南县 · 夏玉米</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2025-06-17</td></tr><tr><td>县代码</td><td>341225.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈浅紫色。</td></tr><tr><td>备注</td><td>出苗期，呈裸地特征，没有明显植被特征。</td></tr></table>
@@ -1390,11 +1455,11 @@
       </article>
       <article class="tcard" data-season="秋收" data-county="阜南县" data-crop="夏玉米" data-band="243" data-feat="243假彩色影像呈浅绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/秋收/秋收_0_4_false_004_阜南县_夏玉米.jpg" alt="阜南县 夏玉米 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/秋收/秋收_0_4_false_004_阜南县_夏玉米.jpg" alt="阜南县 夏玉米 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>阜南县 · 夏玉米</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2025-07-24</td></tr><tr><td>县代码</td><td>341225.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈浅绿色。</td></tr><tr><td>备注</td><td>大喇叭口期，有明显植被特征</td></tr></table>
@@ -1402,11 +1467,11 @@
       </article>
       <article class="tcard" data-season="秋收" data-county="阜南县" data-crop="夏玉米" data-band="243" data-feat="243假彩色影像呈暗绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/秋收/秋收_0_5_false_005_阜南县_夏玉米.jpg" alt="阜南县 夏玉米 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/秋收/秋收_0_5_false_005_阜南县_夏玉米.jpg" alt="阜南县 夏玉米 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          <div class="card-imgs-secondary"><div><img src="assets/images/秋收/秋收_0_7_false_007_阜南县_夏玉米.jpg" loading="lazy"><span class="band-badge small band-243">假彩色(243)</span></div></div>
         </div>
+        <div class="card-imgs-secondary"><div><img src="assets/images/秋收/秋收_0_7_false_007_阜南县_夏玉米.jpg" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"><span class="band-badge small">假彩色(243)</span></div></div>
         <div class="card-info">
           <h3>阜南县 · 夏玉米</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2025-08-05</td></tr><tr><td>县代码</td><td>341225.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈暗绿色。</td></tr><tr><td>备注</td><td>抽雄期，有明显植被特征，较易与其他作物区分</td></tr></table>
@@ -1414,11 +1479,11 @@
       </article>
       <article class="tcard" data-season="秋收" data-county="阜南县" data-crop="大豆" data-band="243" data-feat="243假彩色影像呈浅紫色。">
         <div class="card-img-wrap">
-          <img src="assets/images/秋收/秋收_0_11_false_011_阜南县_大豆.jpg" alt="阜南县 大豆 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/秋收/秋收_0_11_false_011_阜南县_大豆.jpg" alt="阜南县 大豆 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          <div class="card-imgs-secondary"><div><img src="assets/images/秋收/秋收_0_13_false_013_阜南县_大豆.jpg" loading="lazy"><span class="band-badge small band-243">假彩色(243)</span></div></div>
         </div>
+        <div class="card-imgs-secondary"><div><img src="assets/images/秋收/秋收_0_13_false_013_阜南县_大豆.jpg" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"><span class="band-badge small">假彩色(243)</span></div></div>
         <div class="card-info">
           <h3>阜南县 · 大豆</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2025-06-17</td></tr><tr><td>县代码</td><td>341225.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈浅紫色。</td></tr><tr><td>备注</td><td>出苗期，呈裸地特征，没有明显植被特征。</td></tr></table>
@@ -1426,11 +1491,11 @@
       </article>
       <article class="tcard" data-season="秋收" data-county="阜南县" data-crop="大豆" data-band="243" data-feat="243假彩色影像呈浅亮绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/秋收/秋收_0_14_false_014_阜南县_大豆.jpg" alt="阜南县 大豆 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/秋收/秋收_0_14_false_014_阜南县_大豆.jpg" alt="阜南县 大豆 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>阜南县 · 大豆</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2025-07-24</td></tr><tr><td>县代码</td><td>341225.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈浅亮绿色。</td></tr><tr><td>备注</td><td>开花期，有明显植被特征</td></tr></table>
@@ -1438,11 +1503,11 @@
       </article>
       <article class="tcard" data-season="秋收" data-county="阜南县" data-crop="大豆" data-band="243" data-feat="243假彩色影像呈亮绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/秋收/秋收_0_12_false_012_阜南县_大豆.jpg" alt="阜南县 大豆 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/秋收/秋收_0_12_false_012_阜南县_大豆.jpg" alt="阜南县 大豆 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          <div class="card-imgs-secondary"><div><img src="assets/images/秋收/秋收_0_15_false_015_阜南县_大豆.jpg" loading="lazy"><span class="band-badge small band-243">假彩色(243)</span></div></div>
         </div>
+        <div class="card-imgs-secondary"><div><img src="assets/images/秋收/秋收_0_15_false_015_阜南县_大豆.jpg" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"><span class="band-badge small">假彩色(243)</span></div></div>
         <div class="card-info">
           <h3>阜南县 · 大豆</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2025-08-05</td></tr><tr><td>县代码</td><td>341225.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈亮绿色。</td></tr><tr><td>备注</td><td>开花期，有明显植被特征</td></tr></table>
@@ -1450,11 +1515,11 @@
       </article>
       <article class="tcard" data-season="秋收" data-county="阜南县" data-crop="中稻" data-band="243" data-feat="243假彩色影像呈浅白粉色。">
         <div class="card-img-wrap">
-          <img src="assets/images/秋收/秋收_0_18_false_018_阜南县_中稻.jpg" alt="阜南县 中稻 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/秋收/秋收_0_18_false_018_阜南县_中稻.jpg" alt="阜南县 中稻 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>阜南县 · 中稻</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2025-06-17</td></tr><tr><td>县代码</td><td>341225.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈浅白粉色。</td></tr><tr><td>备注</td><td>幼苗期，呈裸地特征，没有明显植被特征。</td></tr></table>
@@ -1462,11 +1527,11 @@
       </article>
       <article class="tcard" data-season="秋收" data-county="阜南县" data-crop="中稻" data-band="243" data-feat="243假彩色影像呈暗绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/秋收/秋收_0_20_false_020_阜南县_中稻.jpg" alt="阜南县 中稻 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/秋收/秋收_0_20_false_020_阜南县_中稻.jpg" alt="阜南县 中稻 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>阜南县 · 中稻</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2025-08-05</td></tr><tr><td>县代码</td><td>341225.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈暗绿色。</td></tr><tr><td>备注</td><td>拔节孕穗期，有明显植被特征。</td></tr></table>
@@ -1474,11 +1539,11 @@
       </article>
       <article class="tcard" data-season="秋收" data-county="阜南县" data-crop="中稻" data-band="243" data-feat="243假彩色影像呈暗绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/秋收/秋收_0_19_false_019_阜南县_中稻.jpg" alt="阜南县 中稻 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/秋收/秋收_0_19_false_019_阜南县_中稻.jpg" alt="阜南县 中稻 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>阜南县 · 中稻</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2025-07-24</td></tr><tr><td>县代码</td><td>341225.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈暗绿色。</td></tr><tr><td>备注</td><td>拔节期，有明显植被特征。</td></tr></table>
@@ -1486,11 +1551,11 @@
       </article>
       <article class="tcard" data-season="秋收" data-county="阜南县" data-crop="花生" data-band="243" data-feat="243假彩色影像呈浅白紫色。">
         <div class="card-img-wrap">
-          <img src="assets/images/秋收/秋收_0_24_false_024_阜南县_花生.jpg" alt="阜南县 花生 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/秋收/秋收_0_24_false_024_阜南县_花生.jpg" alt="阜南县 花生 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>阜南县 · 花生</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2025-06-17</td></tr><tr><td>县代码</td><td>341225.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈浅白紫色。</td></tr><tr><td>备注</td><td>出苗期，呈裸地特征，没有明显植被特征。</td></tr></table>
@@ -1498,11 +1563,11 @@
       </article>
       <article class="tcard" data-season="秋收" data-county="阜南县" data-crop="花生" data-band="243" data-feat="243假彩色影像呈浅亮黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/秋收/秋收_0_25_false_025_阜南县_花生.jpg" alt="阜南县 花生 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/秋收/秋收_0_25_false_025_阜南县_花生.jpg" alt="阜南县 花生 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>阜南县 · 花生</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2025-07-24</td></tr><tr><td>县代码</td><td>341225.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈浅亮黄绿色。</td></tr><tr><td>备注</td><td>下针期，有明显植被特征。</td></tr></table>
@@ -1510,11 +1575,11 @@
       </article>
       <article class="tcard" data-season="秋收" data-county="阜南县" data-crop="花生" data-band="243" data-feat="243假彩色影像呈亮黄绿色。">
         <div class="card-img-wrap">
-          <img src="assets/images/秋收/秋收_0_26_false_026_阜南县_花生.jpg" alt="阜南县 花生 假彩色(243)" loading="lazy"
+          <img class="card-img" src="assets/images/秋收/秋收_0_26_false_026_阜南县_花生.jpg" alt="阜南县 花生 假彩色(243)" loading="lazy" data-band="假彩色(243)" onclick="openLb(this)"
                onerror="this.parentElement.innerHTML='<div class=img-placeholder>图像加载失败</div>'">
           <span class="band-badge band-243">假彩色(243)</span>
-          
         </div>
+        
         <div class="card-info">
           <h3>阜南县 · 花生</h3>
           <table class="info-table"><tr><td>影像时相</td><td>2025-08-05</td></tr><tr><td>县代码</td><td>341225.0</td></tr><tr><td>影像特征</td><td class="feat-text">243假彩色影像呈亮黄绿色。</td></tr><tr><td>备注</td><td>灌浆初期，有明显植被特征。</td></tr></table>
@@ -1523,11 +1588,15 @@
     </div>
   </section>
 </main>
+<div class="lightbox" id="lightbox" onclick="closeLb()">
+  <img id="lb-img" src="" alt="">
+  <div class="lb-band" id="lb-band"></div>
+</div>
 <footer>
   <p>数据来源：安徽省农作物遥感解译知识库（夏收·早稻·秋收） | 影像来源：Excel 内嵌真实波段组合遥感影像</p>
 </footer>
 <script>
-const DATA = {
+const DATA = {{
   "seasons": {
     "夏收": [
       {
@@ -7613,8 +7682,16 @@ const DATA = {
   },
   "total_images": 243,
   "entries_mapped": 243
-};
+}};
 const SEASONS = ["夏收","早稻","秋收"];
+// Lightbox (click image to view full, uncropped)
+function openLb(el){{
+  document.getElementById("lb-img").src=el.src;
+  document.getElementById("lb-band").textContent=el.dataset.band||"";
+  document.getElementById("lightbox").classList.add("open");
+}}
+function closeLb(){{ document.getElementById("lightbox").classList.remove("open"); }}
+document.addEventListener("keydown",function(e){{ if(e.key==="Escape")closeLb(); }});
 // Search
 document.getElementById("search").addEventListener("input",function(e){{
   const q=e.target.value.trim().toLowerCase();
